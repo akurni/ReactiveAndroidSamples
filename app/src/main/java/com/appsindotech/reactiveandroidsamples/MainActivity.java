@@ -12,9 +12,11 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import rx.Observable;
 import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.functions.Action0;
 import rx.functions.Action1;
 import rx.functions.Func1;
+import rx.schedulers.Schedulers;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -83,17 +85,24 @@ public class MainActivity extends AppCompatActivity {
 
             case R.id.radioButton3:
                 final StringBuilder longListStringBuilder = new StringBuilder();
-                myLongIntegerListObservable.map(new Func1<Integer, Integer>() {
+                myLongIntegerListObservable
+                        .map(new Func1<Integer, Integer>() {
                     @Override
                     public Integer call(Integer integer) {
                         return integer + 1;
+                    }
+                }).filter(new Func1<Integer, Boolean>() {
+                    @Override
+                    public Boolean call(Integer integer) {
+                        return (integer%2 == 0);
                     }
                 }).map(new Func1<Integer, Integer>() {
                     @Override
                     public Integer call(Integer integer) {
                         return integer * 2;
                     }
-                }).subscribe(new Action1<Integer>() {
+                })
+                        .subscribe(new Action1<Integer>() {
                     @Override
                     public void call(Integer integer) {
                         longListStringBuilder.append(integer);
@@ -128,7 +137,7 @@ public class MainActivity extends AppCompatActivity {
     );
 
     // Create Observable the simple way
-    Observable<Integer> myIntegerListObservable = Observable.just(1, 2, 3, 4, 5);
+    Observable<Integer> myIntegerListObservable = Observable.just(1, 2, 3, 4, 5, 6, 10);
 
     // Create Observable that emits 100 integers
     Observable<Integer> myLongIntegerListObservable = Observable.create(new Observable.OnSubscribe<Integer>() {
@@ -137,6 +146,7 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 1; i <= 100; i++) {
                 subscriber.onNext(i);
             }
+            subscriber.er
             subscriber.onCompleted();
         }
     });
