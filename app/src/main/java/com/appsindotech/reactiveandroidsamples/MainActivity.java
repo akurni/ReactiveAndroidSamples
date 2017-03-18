@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    // Create Observable that emit a string
     Observable<String> myObservable = Observable.create(
             new Observable.OnSubscribe<String>() {
                 @Override
@@ -146,7 +146,6 @@ public class MainActivity extends AppCompatActivity {
             for (int i = 1; i <= 100; i++) {
                 subscriber.onNext(i);
             }
-            subscriber.er
             subscriber.onCompleted();
         }
     });
